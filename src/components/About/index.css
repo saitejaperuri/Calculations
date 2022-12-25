@@ -1,0 +1,24 @@
+/* Write your CSS code here */
+.about {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.about-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  background-color: rgb(34, 70, 124);
+}
+
+.products-img {
+  width: 200px;
+}
+
+.para {
+  font-weight: bold;
+  color: floralwhite;
+}
