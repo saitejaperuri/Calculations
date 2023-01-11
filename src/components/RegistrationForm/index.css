@@ -35,3 +35,10 @@
 .error {
   font-size: 10px;
 }
+
+.back-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

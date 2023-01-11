@@ -1,12 +1,17 @@
 import {Component} from 'react'
 
+import Cookies from 'js-cookie'
+
+import {Redirect} from 'react-router-dom'
+
 import RegistrationForm from '../RegistrationForm'
 
 import './index.css'
 
-const mail = localStorage.getItem('email').replace(/"/g, '')
-const pass = localStorage.getItem('password').replace(/"/g, '')
+const mail = localStorage.getItem('email')
+const pass = localStorage.getItem('password')
 console.log(mail)
+
 class LoginForm extends Component {
   state = {
     username: '',
@@ -24,8 +29,13 @@ class LoginForm extends Component {
     this.setState({password: event.target.value})
   }
 
-  onSubmitSuccess = () => {
+  onSubmitSuccess = password => {
     const {history} = this.props
+
+    Cookies.set('jwt_token', password, {
+      expires: 30,
+    })
+    console.log(password)
 
     history.replace('/')
   }
@@ -39,7 +49,7 @@ class LoginForm extends Component {
     const {username, password} = this.state
 
     if (username === mail && password === pass) {
-      this.onSubmitSuccess()
+      this.onSubmitSuccess(password)
     } else {
       this.onSubmitFailure()
     }
@@ -94,27 +104,41 @@ class LoginForm extends Component {
     const {showSubmitError} = this.state
 
     return (
-      <div className="login-form-container">
-        <form className="form-container" onSubmit={this.submitForm}>
-          <h1 className="head">Login Page</h1>
-          <div className="input-container">{this.renderUsernameField()}</div>
-          <div className="input-container">{this.renderPasswordField()}</div>
-          <button type="submit" className="login-button">
-            Login
-          </button>
-          <button type="button" className="login-button" onClick={this.onSign}>
-            Signin
-          </button>
-          {showSubmitError && (
-            <p className="error-message">*username or password not matched</p>
-          )}
-        </form>
+      <div className="form-main-container">
+        <div className="sub">
+          <h1>Let me Know Calculations</h1>
+        </div>
+        <div className="login-form-container">
+          <form className="form-container" onSubmit={this.submitForm}>
+            <h1 className="head">Login Page</h1>
+            <div className="input-container">{this.renderUsernameField()}</div>
+            <div className="input-container">{this.renderPasswordField()}</div>
+            <button type="submit" className="login-button">
+              Login
+            </button>
+            <button
+              type="button"
+              className="login-button"
+              onClick={this.onSign}
+            >
+              Signin
+            </button>
+            {showSubmitError && (
+              <p className="error-message">*username or password not matched</p>
+            )}
+          </form>
+        </div>
       </div>
     )
   }
 
   render() {
     const {isClicked} = this.state
+    const jwtToken = Cookies.get('jwt_token')
+
+    if (jwtToken !== undefined) {
+      return <Redirect to="/" />
+    }
     return <>{isClicked ? <RegistrationForm /> : this.renderLogin()}</>
   }
 }

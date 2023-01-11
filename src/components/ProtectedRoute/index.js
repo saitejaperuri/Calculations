@@ -1,16 +1,13 @@
-// Write your JS code here
 import {Route, Redirect} from 'react-router-dom'
-
 import Cookies from 'js-cookie'
 
-const pass = localStorage.getItem('username').replace(/"/g, '')
-
 const ProtectedRoute = props => {
-  const token = Cookies.get('username')
-  console.log(pass)
-  if (token === pass) {
-    return <Route {...props} />
+  const token = Cookies.get('jwt_token')
+  console.log(token)
+  if (token === undefined) {
+    return <Redirect to="/about" />
   }
-  return <Redirect to="/login" />
+  return <Route {...props} />
 }
+
 export default ProtectedRoute
